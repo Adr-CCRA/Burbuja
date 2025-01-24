@@ -32,7 +32,6 @@ public class movimientoJugador : MonoBehaviour
 
         float maxVelocidad = 45f;
         rb.velocity = Vector2.ClampMagnitude(rb.velocity, maxVelocidad);
-        Debug.Log(rb.velocity);
     }
     public void ModificarVelocidad(float ajustar)
     {

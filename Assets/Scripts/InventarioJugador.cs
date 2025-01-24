@@ -1,12 +1,11 @@
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(movimientoJugador))]
 public class InventarioJugador : MonoBehaviour
 {
-     [Header("Inventario")]
+    [Header("Inventario")]
     [SerializeField] private Transform transformarBurbuja;
     [SerializeField] private Vector3 baseScale = Vector3.one;
     [SerializeField] private float scaleFactor = 0.1f;
@@ -14,7 +13,7 @@ public class InventarioJugador : MonoBehaviour
     [SerializeField] private float impactoPeso = 0.2f;
     [SerializeField] private Text contadorBasura; 
 
-    private List<itemBasura> basuraRecogida = new List<itemBasura>();
+    public List<itemBasura> basuraRecogida = new List<itemBasura>();
     private movimientoJugador movimientoP;
     private float pesoActual = 0f;
 
@@ -56,5 +55,22 @@ public class InventarioJugador : MonoBehaviour
         movimientoP.ResetearVelocidad();
         transformarBurbuja.localScale = baseScale;
         ActualizarCantBasura(); 
+    }
+
+    public List<itemBasura> obtenerBasuraRecolectada()
+    {
+        return basuraRecogida;
+    }
+
+    public void eliminarBasura(itemBasura item)
+    {
+        if (basuraRecogida.Contains(item))
+        {
+            basuraRecogida.Remove(item);
+            pesoActual -= item.Peso;
+            movimientoP.ModificarVelocidad(item.Peso * impactoPeso);
+            ActualizarTamBurbuja();
+            ActualizarCantBasura();
+        }
     }
 }
