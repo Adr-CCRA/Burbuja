@@ -9,9 +9,11 @@ public class InventarioJugador : MonoBehaviour
     [SerializeField] private Transform transformarBurbuja;
     [SerializeField] private Vector3 baseScale = Vector3.one;
     [SerializeField] private float scaleFactor = 0.1f;
-    [SerializeField] private int maxItems = 3;
+    [SerializeField] private int maxItems = 5;
     [SerializeField] private float impactoPeso = 0.2f;
     [SerializeField] private Text contadorBasura; 
+    [SerializeField] private Transform inventarioUI;
+    [SerializeField] private GameObject prefabSlot;
 
     public List<itemBasura> basuraRecogida = new List<itemBasura>();
     private movimientoJugador movimientoP;
@@ -38,7 +40,12 @@ public class InventarioJugador : MonoBehaviour
         movimientoP.ModificarVelocidad(-itemBasura.Peso * impactoPeso);
         ActualizarTamBurbuja();
         ActualizarCantBasura(); 
-        Destroy(itemBasura.gameObject);
+        GameObject nuevoSlot = Instantiate(prefabSlot, inventarioUI);
+        Image spriteHolder = nuevoSlot.transform.Find("SpriteBasura").GetComponent<Image>();
+        spriteHolder.sprite = itemBasura.GetComponent<SpriteRenderer>().sprite;
+        nuevoSlot.GetComponent<Button>().onClick.AddListener(() => OnClickBasura(itemBasura));
+
+        itemBasura.gameObject.SetActive(false);
     }
     private void ActualizarTamBurbuja()
     {
@@ -55,6 +62,10 @@ public class InventarioJugador : MonoBehaviour
         movimientoP.ResetearVelocidad();
         transformarBurbuja.localScale = baseScale;
         ActualizarCantBasura(); 
+        foreach (Transform slot in inventarioUI)
+        {
+            Destroy(slot.gameObject);
+        }
     }
 
     public List<itemBasura> obtenerBasuraRecolectada()
@@ -66,11 +77,37 @@ public class InventarioJugador : MonoBehaviour
     {
         if (basuraRecogida.Contains(item))
         {
-            basuraRecogida.Remove(item);
+            int index = basuraRecogida.IndexOf(item);
+            basuraRecogida.RemoveAt(index);
             pesoActual -= item.Peso;
             movimientoP.ModificarVelocidad(item.Peso * impactoPeso);
+            Destroy(inventarioUI.GetChild(index).gameObject);
+
             ActualizarTamBurbuja();
             ActualizarCantBasura();
         }
+    }
+
+    private itemBasura basuraSeleccionada;
+
+    public void SeleccionarBasura(itemBasura basura)
+    {
+        basuraSeleccionada = basura;
+        Debug.Log($"Basura seleccionada: {basura.Tipo}");
+    }
+
+    public itemBasura ObtenerBasuraSeleccionada()
+    {
+        return basuraSeleccionada;
+    }
+
+    public void DeseleccionarBasura()
+    {
+        basuraSeleccionada = null;
+    }
+
+    public void OnClickBasura(itemBasura basura)
+    {
+        SeleccionarBasura(basura);
     }
 }

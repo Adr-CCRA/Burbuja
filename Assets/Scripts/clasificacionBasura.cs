@@ -12,12 +12,33 @@ public class clasificacionBasura : MonoBehaviour
 
     private void Update()
     {
-        if (cercaContenedor && Keyboard.current.fKey.wasPressedThisFrame)
+        if (cercaContenedor && Keyboard.current.fKey.wasPressedThisFrame && activarContenedor != null)
         {
-            abrirContenedor();
+            Debug.Log($"Abriendo contenedor: {activarContenedor.name}");
+        }
+
+        var basuraSeleccionada = inventario.ObtenerBasuraSeleccionada();
+
+        if (Input.GetMouseButtonDown(1) && basuraSeleccionada != null && activarContenedor != null)
+        {
+            DepositarBasura(basuraSeleccionada, activarContenedor);
         }
     }
 
+    private void DepositarBasura(itemBasura basura, GameObject contenedor)
+    {
+        if (contenedor.tag == basura.Tipo)
+        {
+            Debug.Log($"¡Basura clasificada correctamente en {contenedor.name}!");
+
+            inventario.eliminarBasura(basura);
+            inventario.DeseleccionarBasura();
+        }
+        else
+        {
+            Debug.Log($"Clasificación incorrecta. Penalización aplicada.");
+        }
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (adminContenedor.EsContenedor(collision.gameObject))
