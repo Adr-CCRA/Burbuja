@@ -8,9 +8,9 @@ public class InventarioJugador : MonoBehaviour
     [Header("Inventario")]
     [SerializeField] private Transform transformarBurbuja;
     [SerializeField] private Vector3 baseScale = Vector3.one;
-    [SerializeField] private float scaleFactor = 0.1f;
+    [SerializeField] private float scaleFactor = 0.03f;
     [SerializeField] private int maxItems = 5;
-    [SerializeField] private float impactoPeso = 0.2f;
+    [SerializeField] private float impactoPeso = 1f;
     [SerializeField] private Text contadorBasura; 
     [SerializeField] private Transform inventarioUI;
     [SerializeField] private GameObject prefabSlot;
@@ -29,6 +29,7 @@ public class InventarioJugador : MonoBehaviour
         itemBasura itemBasura = collision.GetComponent<itemBasura>();
         if (itemBasura != null && basuraRecogida.Count < maxItems)
         {
+            movimientoP.Comer();
             recogerBasura(itemBasura);
         }
     }
@@ -53,7 +54,7 @@ public class InventarioJugador : MonoBehaviour
     }
     private void ActualizarCantBasura()
     {
-        contadorBasura.text = $"Basura: {basuraRecogida.Count}/{maxItems}";
+        contadorBasura.text = $"BASURA: {basuraRecogida.Count}/{maxItems}";
     }
     public void LimpiarInventario()
     {

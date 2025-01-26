@@ -6,8 +6,12 @@ public class ControladorContenedor : MonoBehaviour
 {
     [SerializeField] private GameObject[] contenedores;
     private GameObject activarContenedor;
-    [SerializeField] private float activarIntervalos = 5f;
+    [SerializeField] private float activarIntervalos = 2f;
     [SerializeField] private float duracionActivo = 10f;
+
+    private GameObject ultimoContenedorActivado;
+    private int vecesActivadoConsecutivas = 0;
+    private const int MAX_ACTIVACIONES_CONSECUTIVAS = 2;
 
     private void Start()
     {
@@ -20,8 +24,24 @@ public class ControladorContenedor : MonoBehaviour
         {
             if (activarContenedor == null)
             {
-                int randomIndex = Random.Range(0, contenedores.Length);
-                activarContenedor = contenedores[randomIndex];
+                GameObject nuevoContenedor;
+                do
+                {
+                    int randomIndex = Random.Range(0, contenedores.Length);
+                    nuevoContenedor = contenedores[randomIndex];
+                } while (nuevoContenedor == ultimoContenedorActivado && vecesActivadoConsecutivas >= MAX_ACTIVACIONES_CONSECUTIVAS);
+
+                activarContenedor = nuevoContenedor;
+
+                if (nuevoContenedor == ultimoContenedorActivado)
+                {
+                    vecesActivadoConsecutivas++;
+                }
+                else
+                {
+                    ultimoContenedorActivado = nuevoContenedor;
+                    vecesActivadoConsecutivas = 1;
+                }
 
                 EstablecerContenedor(activarContenedor, true);
 
@@ -47,6 +67,7 @@ public class ControladorContenedor : MonoBehaviour
     {
         return activarContenedor;
     }
+
     public bool EsContenedor(GameObject obj)
     {
         return obj.CompareTag("Organicos") || obj.CompareTag("Envases") || obj.CompareTag("Carton");

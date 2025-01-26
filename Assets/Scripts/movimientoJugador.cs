@@ -4,6 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(ControladorEntrada))]
+[RequireComponent(typeof(Animator))]
 public class movimientoJugador : MonoBehaviour
 {
     [Header("Movimiento")]
@@ -12,16 +13,19 @@ public class movimientoJugador : MonoBehaviour
 
     private Rigidbody2D rb;
     private ControladorEntrada controladorEntrada;
+    private Animator animator;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         controladorEntrada = GetComponent<ControladorEntrada>();
+        animator = GetComponent<Animator>();
     }
 
     private void FixedUpdate()
     {
         MovimientoP();
+        ActualizarAnimaciones();
     }
 
     private void MovimientoP()
@@ -35,11 +39,37 @@ public class movimientoJugador : MonoBehaviour
     }
     public void ModificarVelocidad(float ajustar)
     {
-        velocidadMovimiento = Mathf.Max(1f, velocidadMovimiento + ajustar);
+        velocidadMovimiento = Mathf.Max(5f, velocidadMovimiento + ajustar);
     }
 
     public void ResetearVelocidad()
     {
-        velocidadMovimiento = 30f;
+        velocidadMovimiento = 40f;
+    }
+    private void ActualizarAnimaciones()
+    {
+        Vector2 MovimientoEntrada = controladorEntrada.MovimientoEntrada;
+
+        if (MovimientoEntrada.x < -0.1f)
+        {
+            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
+        else if (MovimientoEntrada.x > 0.1f)
+        {
+            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
+
+        animator.SetFloat("Velocidad", rb.velocity.magnitude);
+    }
+
+    public void Comer()
+    {
+        animator.SetTrigger("Comer");
+    }
+
+    public void Morir()
+    {
+        animator.SetTrigger("Morir");
+        velocidadMovimiento = 0f;
     }
 }

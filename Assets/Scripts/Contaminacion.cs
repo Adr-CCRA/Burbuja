@@ -8,7 +8,7 @@ public class Contaminacion : MonoBehaviour
 
     [Header("Medidor de Contaminación")]
     [SerializeField] private Slider medidorContaminacion;
-    [SerializeField] private int maxContaminacion = 10;
+    [SerializeField] private int maxContaminacion = 25;
     [SerializeField] private int contaminacionActual = 0;
 
     private void Awake()

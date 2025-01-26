@@ -15,7 +15,7 @@ public class AdministradorUI : MonoBehaviour
     [SerializeField] private Button botonSalir;
 
     [Header("Configuraciones de tiempo")]
-    [SerializeField] private float tiempoTotal = 300f;
+    [SerializeField] private float tiempoTotal = 180f;
     private float tiempoRestante;
 
     [Header("Sonidos")]
@@ -74,7 +74,7 @@ public class AdministradorUI : MonoBehaviour
 
     private void ActualizarPuntajeUI()
     {
-        if (textoPuntaje != null) textoPuntaje.text = $"Clasificada: {basuraClasificada}";
+        if (textoPuntaje != null) textoPuntaje.text = $"CLASIFICADO: {basuraClasificada}";
     }
 
     private void TogglePausa()

@@ -10,10 +10,10 @@ public class SpawnerBasura : MonoBehaviour
     public GameObject[] prefabsCartonPapel;
 
     [Header("Configuraciones de Spawn")]
-    public float intervaloInicial = 3f;
-    public float intervaloMinimo = 0.5f;
-    public float reduccionIntervalo = 0.1f;
-    public float velocidadAumento = 0.2f;
+    public float intervaloInicial = 10f;
+    public float intervaloMinimo = 10f;
+    public float reduccionIntervalo = 0f;
+    public float velocidadAumento = 0f;
     public float velocidadMaxima = 5f;
 
     private float intervaloActual;
@@ -22,7 +22,7 @@ public class SpawnerBasura : MonoBehaviour
     private void Start()
     {
         intervaloActual = intervaloInicial;
-        velocidadActual = 0.2f;
+        velocidadActual = 0.4f;
         StartCoroutine(GenerarBasura());
     }
 
@@ -67,7 +67,7 @@ public class SpawnerBasura : MonoBehaviour
 
     private GameObject SeleccionarBasuraAleatoria()
     {
-        int tipo = Random.Range(0, 3); // 0 = Plástico, 1 = Orgánico, 2 = CartónPapel
+        int tipo = Random.Range(0, 3);
         switch (tipo)
         {
             case 0:
