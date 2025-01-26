@@ -6,6 +6,8 @@ public class clasificacionBasura : MonoBehaviour
 {
     [SerializeField] private InventarioJugador inventario;
     [SerializeField] private ControladorContenedor adminContenedor;
+    [SerializeField] private AudioSource efectoSonidoCorrecto;
+    [SerializeField] private AudioSource efectoSonidoError;
 
     private GameObject activarContenedor;
     private bool cercaContenedor = false;
@@ -33,10 +35,13 @@ public class clasificacionBasura : MonoBehaviour
 
             inventario.eliminarBasura(basura);
             inventario.DeseleccionarBasura();
+            efectoSonidoCorrecto.Play();
         }
         else
         {
+            efectoSonidoError.Play();
             Debug.Log($"Clasificación incorrecta. Penalización aplicada.");
+            FindObjectOfType<AdministradorUI>().IncrementarTiempo(10f);
         }
     }
     private void OnTriggerEnter2D(Collider2D collision)

@@ -13,6 +13,7 @@ public class AdministradorUI : MonoBehaviour
     [SerializeField] private Button botonVolver;
     [SerializeField] private Button botonReiniciar;
     [SerializeField] private Button botonSalir;
+    [SerializeField] private GameObject FinJuego;    
 
     [Header("Configuraciones de tiempo")]
     [SerializeField] private float tiempoTotal = 180f;
@@ -64,12 +65,11 @@ public class AdministradorUI : MonoBehaviour
     {
         basuraClasificada++;
         ActualizarPuntajeUI();
-        if (efectoSonidoCorrecto != null) efectoSonidoCorrecto.Play();
     }
 
     public void ErrorClasificacion()
     {
-        if (efectoSonidoError != null) efectoSonidoError.Play();
+        Debug.Log("Clasificación incorrecta. Penalización aplicada.");
     }
 
     private void ActualizarPuntajeUI()
@@ -84,13 +84,13 @@ public class AdministradorUI : MonoBehaviour
         if (menuPausa != null) menuPausa.SetActive(juegoPausado);
     }
 
-    private void ReiniciarJuego()
+    public void ReiniciarJuego()
     {
         Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    private void SalirDelJuego()
+    public void SalirDelJuego()
     {
         Debug.Log("Saliendo del juego...");
         Application.Quit();
@@ -99,6 +99,16 @@ public class AdministradorUI : MonoBehaviour
     private void FinDelJuego()
     {
         Debug.Log("¡Tiempo agotado! Fin del juego.");
-        SceneManager.LoadScene("FinDelJuego");
+        FinJuego.SetActive(true);
+        TogglePausa();
+    }
+    public void IncrementarTiempo(float cantidad)
+    {
+        tiempoRestante += cantidad;
+        if (tiempoRestante > tiempoTotal)
+        {
+            tiempoRestante = tiempoTotal;
+        }
+        ActualizarTiempoUI();
     }
 }

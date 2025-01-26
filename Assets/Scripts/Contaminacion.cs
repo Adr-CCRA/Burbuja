@@ -10,6 +10,7 @@ public class Contaminacion : MonoBehaviour
     [SerializeField] private Slider medidorContaminacion;
     [SerializeField] private int maxContaminacion = 25;
     [SerializeField] private int contaminacionActual = 0;
+    [SerializeField] private GameObject Perdiste; 
 
     private void Awake()
     {
@@ -31,6 +32,7 @@ public class Contaminacion : MonoBehaviour
     private void FinDelJuego()
     {
         Debug.Log("¡Juego terminado! La contaminación alcanzó el límite.");
+        Perdiste.SetActive(true);
         Time.timeScale = 0;
     }
 }
